@@ -10,7 +10,7 @@ class PokemonModel {
   List<Moves>? moves;
   String? name;
   int? order;
-  List<Null>? pastTypes;
+  List<String>? pastTypes;
   Ability? species;
   Sprites? sprites;
   List<Stats>? stats;
@@ -304,13 +304,13 @@ class VersionGroupDetails {
 
 class Sprites {
   String? backDefault;
-  Null? backFemale;
+  String? backFemale;
   String? backShiny;
-  Null? backShinyFemale;
+  String? backShinyFemale;
   String? frontDefault;
-  Null? frontFemale;
+  String? frontFemale;
   String? frontShiny;
-  Null? frontShinyFemale;
+  String? frontShinyFemale;
   Other? other;
   Versions? versions;
 
@@ -395,7 +395,7 @@ class Other {
 
 class DreamWorld {
   String? frontDefault;
-  Null? frontFemale;
+  String? frontFemale;
 
   DreamWorld({this.frontDefault, this.frontFemale});
 
@@ -414,9 +414,9 @@ class DreamWorld {
 
 class Home {
   String? frontDefault;
-  Null? frontFemale;
+  String? frontFemale;
   String? frontShiny;
-  Null? frontShinyFemale;
+  String? frontShinyFemale;
 
   Home(
       {this.frontDefault,
@@ -818,13 +818,13 @@ class GenerationIv {
 
 class DiamondPearl {
   String? backDefault;
-  Null? backFemale;
+  String? backFemale;
   String? backShiny;
-  Null? backShinyFemale;
+  String? backShinyFemale;
   String? frontDefault;
-  Null? frontFemale;
+  String? frontFemale;
   String? frontShiny;
-  Null? frontShinyFemale;
+  String? frontShinyFemale;
 
   DiamondPearl(
       {this.backDefault,
@@ -884,13 +884,13 @@ class GenerationV {
 class BlackWhite {
   DiamondPearl? animated;
   String? backDefault;
-  Null? backFemale;
+  String? backFemale;
   String? backShiny;
-  Null? backShinyFemale;
+  String? backShinyFemale;
   String? frontDefault;
-  Null? frontFemale;
+  String? frontFemale;
   String? frontShiny;
-  Null? frontShinyFemale;
+  String? frontShinyFemale;
 
   BlackWhite(
       {this.animated,

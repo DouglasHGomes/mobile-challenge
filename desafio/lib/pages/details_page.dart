@@ -1,10 +1,12 @@
+import 'package:desafio/models/evolutions.dart';
 import 'package:desafio/models/pokemon.dart';
 import 'package:flutter/material.dart';
 import 'package:string_extensions/string_extensions.dart';
 
 class DetailsPage extends StatefulWidget {
-  const DetailsPage({Key? key, required this.pokemonModel}) : super(key: key);
+  const DetailsPage({Key? key, required this.pokemonModel, required this.evolutionsModel}) : super(key: key);
   final PokemonModel pokemonModel;
+  final EvolutionsModel evolutionsModel;
 
   @override
   State<DetailsPage> createState() => _DetailsPageState();
@@ -12,6 +14,9 @@ class DetailsPage extends StatefulWidget {
 
 class _DetailsPageState extends State<DetailsPage> {
   @override
+  
+  List<String> temp = [];
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
@@ -135,7 +140,7 @@ class _DetailsPageState extends State<DetailsPage> {
                     ),
                   ),
                   const SizedBox(
-                    height: 32,
+                    height: 25,
                   ),
                   const Text(
                     'Evoluções',
@@ -146,9 +151,19 @@ class _DetailsPageState extends State<DetailsPage> {
                       color: Color(0xFF02005B),
                     ),
                   ),
-                  // ************************ INSERIR EVOLUÇÕES AQUI
+                  //temp = allEvolutions(widget.evolutionsModel!.chain!.evolvesTo!),
+                  for(int i = 0; i < widget.evolutionsModel.chain!.evolvesTo!.length; i++)
+                    Text(
+                      widget.evolutionsModel.chain!.evolvesTo!.elementAt(i).species!.name!.capitalize!,
+                      style: const TextStyle(
+                        fontFamily: 'Open Sans',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                        color: Color(0xFFFD1A55),
+                      ),
+                  ),
                   const SizedBox(
-                    height: 107,
+                    height: 25,
                   ),
                   const Text(
                     'Status base',
@@ -293,6 +308,21 @@ class _DetailsPageState extends State<DetailsPage> {
         ),
       ),
     );
+  }
+
+  List<String> allEvolutions (List<EvolvesTo> t){
+
+    List<String> resultado = [];
+
+    for(int i = 0; i < t.length; i++){
+
+      if(t.isEmpty){
+        
+      }else{
+        resultado.add(t.elementAt(i).species!.name!);
+      }
+    }
+    return resultado;
   }
 
   String tipo (List<Types> t){

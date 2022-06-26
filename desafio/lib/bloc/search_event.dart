@@ -10,18 +10,35 @@ abstract class SearchEvent extends Equatable {
 class SearchFetchList extends SearchEvent{
   
   final dio = Dio();
-  final String pokemonName;
-
-  SearchFetchList(this.pokemonName);
+  SearchFetchList();
 
   Future<PokemonModel> getPokemon(String name) async {
     try {
       Response response =
         await dio.get("https://pokeapi.co/api/v2/pokemon/" + name);
       return PokemonModel.fromJson(response.data);
-    } on DioError catch (e) {
-      throw (e.message);
+    } catch (e) {
+      throw (const SearchErrorState(message: 'Não foi possível carregar os dados do Pokémon!'));
     }
   }
 
+  Future<SpeciesModel> getSpecies(int id) async {
+    try {
+      Response response =
+        await dio.get("https://pokeapi.co/api/v2/pokemon-species/" + id.toString());
+      return SpeciesModel.fromJson(response.data);
+    } catch (e) {
+      throw (const SearchErrorState(message: 'Não foi possível carregar os dados das espécies!'));
+    }
+  }
+
+  Future<EvolutionsModel> getEvolutions(String url) async {
+    try {
+      Response response =
+        await dio.get(url);
+      return EvolutionsModel.fromJson(response.data);
+    } catch (e) {
+      throw (const SearchErrorState(message: 'Não foi possível carregar os dados de evoluções!'));
+    }
+  }
 }

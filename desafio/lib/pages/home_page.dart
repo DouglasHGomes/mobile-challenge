@@ -167,8 +167,14 @@ class _HomePageState extends State<HomePage> {
                         backgroundColor: _enabled? const Color(0xFF02005B) : const Color(0xFFBDBDBD),
                         onPressed: ()
                           {
-                            if(_enabled){                              
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => BlocProvider.value(value: BlocProvider.of<SearchBloc>(context)..add(SearchFetchList(_pokemonName)), child: SearchPage(pokemonName: _pokemonName,))));
+                            if(_enabled){    
+                              BlocProvider.of<SearchBloc>(context).namePokemon = _pokemonName.toLowerCase();
+                              Navigator.push(context, MaterialPageRoute(
+                                builder: (context) => BlocProvider.value(
+                                  value: BlocProvider.of<SearchBloc>(context)..add(SearchFetchList()), 
+                                  child: SearchPage(pokemonName: _pokemonName,)
+                                )
+                              ));
                             }
                           },
                         label: 

@@ -1,4 +1,3 @@
-
 import 'package:desafio/pages/details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -76,7 +75,7 @@ class _SearchPageState extends State<SearchPage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => DetailsPage(pokemonModel: state.pokemon)));
+                              builder: (context) => DetailsPage(pokemonModel: state.pokemon, evolutionsModel: state.evolutions,)));
                     },
                     child: ListTile(
                       leading: Container(
@@ -122,14 +121,29 @@ class _SearchPageState extends State<SearchPage> {
             );
           }else if (state is SearchLoadingState){
             return const Center(child: CircularProgressIndicator());
-          }else{
-            return const Text(
-              'Pokémon não encontrado!',
-              style: TextStyle(
-                fontFamily: 'Open Sans',
-                fontWeight: FontWeight.w700,
-                fontSize: 18,
-                color: Color(0xFF02005B),
+          }else if (state is SearchErrorState){
+            return Center(
+              child: Text(
+                state.message,
+                style: const TextStyle(
+                  fontFamily: 'Open Sans',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18,
+                  color: Color(0xFF02005B),
+                ),
+              ),
+            );
+          }
+          else{
+            return const Center(
+              child: Text(
+                'Pokémon não encontrado!',
+                style: TextStyle(
+                  fontFamily: 'Open Sans',
+                  fontWeight: FontWeight.w700,
+                  fontSize: 18,
+                  color: Color(0xFF02005B),
+                ),
               ),
             );
           }
