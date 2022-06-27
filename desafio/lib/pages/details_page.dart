@@ -13,6 +13,9 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
+  
+  List<String>? evolucoes = <String>[];
+  
   @override
 
   Widget build(BuildContext context) {
@@ -150,8 +153,9 @@ class _DetailsPageState extends State<DetailsPage> {
                     ),
                   ),
                   for(int i = 0; i < widget.evolutionsModel.chain!.evolvesTo!.length; i++)
+                  //for(int i = 0; i < allEvolutions(widget.evolutionsModel.chain!.evolvesTo!).length; i++)
                     Text(
-                      widget.evolutionsModel.chain!.evolvesTo!.elementAt(i).species!.name!.capitalize!,
+                      widget.evolutionsModel.chain!.evolvesTo!.elementAt(i).species!.name.capitalize!,
                       style: const TextStyle(
                         fontFamily: 'Open Sans',
                         fontWeight: FontWeight.w700,
@@ -285,7 +289,7 @@ class _DetailsPageState extends State<DetailsPage> {
                     itemCount: widget.pokemonModel.moves!.length,
                     itemBuilder: (BuildContext context, int itemCount){
                       return Padding(
-                        padding: const EdgeInsets.all(15),
+                        padding: const EdgeInsets.all(7),
                         child: Text(
                           '• ' + moves(widget.pokemonModel.moves!)[itemCount],
                           style: const TextStyle(
@@ -307,6 +311,26 @@ class _DetailsPageState extends State<DetailsPage> {
     );
   }
 
+  List<String> allEvolutions(List<EvolvesTo> evolvesTo) {
+
+    if (evolvesTo.isNotEmpty) { 
+      evolucoes!.add(evolvesTo.first.species!.name!);
+      allEvolutions(evolvesTo.first.evolvesTo!);
+    }
+    return evolucoes!;
+  }
+
+  void recursive(List<EvolvesTo> evolvesTo) {
+
+    if (evolvesTo.isNotEmpty) {
+      for (int i = 0; i < evolvesTo.length; i++) {
+        
+        evolucoes!.add(evolvesTo.elementAt(i).species!.name!);
+        allEvolutions(evolvesTo.elementAt(i).evolvesTo!);
+      }
+    }
+  }
+
   String tipo (List<Types> t){
 
     List<String> tipos = [];
@@ -323,20 +347,6 @@ class _DetailsPageState extends State<DetailsPage> {
     }else{
       return 'Tipos: ' + resultado;
     }
-  }
-
-  List<String> allEvolutions(List<EvolvesTo> evolvesTo) {
-
-    List<String> evolucoes = <String>[];
-
-    if (evolvesTo.isNotEmpty) {
-      for (int i = 0; i < widget.evolutionsModel.chain!.evolvesTo!.length; i++) {
-        
-        evolucoes.add(evolvesTo.elementAt(i).species!.name!);
-        allEvolutions(evolvesTo.elementAt(i).evolvesTo!);
-      }
-    }
-    return evolucoes;
   }
 
   List<int> status (List<Stats> s){

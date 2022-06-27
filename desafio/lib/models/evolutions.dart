@@ -23,7 +23,7 @@ class Chain {
         evolvesTo!.add(new EvolvesTo.fromJson(v));
       });
     }
-  }
+  }  
 }
 
 class Species {
@@ -41,7 +41,7 @@ class Species {
 class EvolvesTo {
   Species? species;
   List<EvolvesTo>? evolvesTo;
-
+  
   EvolvesTo({this.species, this.evolvesTo});
 
   EvolvesTo.fromJson(Map<String, dynamic> json) {
@@ -54,5 +54,4 @@ class EvolvesTo {
       });
     }
   }
-
 }
