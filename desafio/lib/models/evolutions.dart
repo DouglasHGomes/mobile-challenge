@@ -18,8 +18,8 @@ class Chain {
     species =
         json['species'] != null ? new Species.fromJson(json['species']) : null;
     if (json['evolves_to'] != null) {
-      evolvesTo = <EvolvesTo>[];
-      json['evolves_to'].forEach((v) {
+      evolvesTo = <EvolvesTo>[];      
+      json['evolves_to'].forEach((v) {        
         evolvesTo!.add(new EvolvesTo.fromJson(v));
       });
     }
@@ -49,9 +49,10 @@ class EvolvesTo {
         json['species'] != null ? new Species.fromJson(json['species']) : null;
     if (json['evolves_to'] != null) {
       evolvesTo = <EvolvesTo>[];
-      json['evolves_to'].forEach((v) {
+      json['evolves_to'].forEach((v) {        
         evolvesTo!.add(new EvolvesTo.fromJson(v));
       });
     }
   }
+
 }

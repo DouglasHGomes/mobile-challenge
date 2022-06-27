@@ -14,8 +14,6 @@ class DetailsPage extends StatefulWidget {
 
 class _DetailsPageState extends State<DetailsPage> {
   @override
-  
-  List<String> temp = [];
 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -151,7 +149,6 @@ class _DetailsPageState extends State<DetailsPage> {
                       color: Color(0xFF02005B),
                     ),
                   ),
-                  //temp = allEvolutions(widget.evolutionsModel!.chain!.evolvesTo!),
                   for(int i = 0; i < widget.evolutionsModel.chain!.evolvesTo!.length; i++)
                     Text(
                       widget.evolutionsModel.chain!.evolvesTo!.elementAt(i).species!.name!.capitalize!,
@@ -310,21 +307,6 @@ class _DetailsPageState extends State<DetailsPage> {
     );
   }
 
-  List<String> allEvolutions (List<EvolvesTo> t){
-
-    List<String> resultado = [];
-
-    for(int i = 0; i < t.length; i++){
-
-      if(t.isEmpty){
-        
-      }else{
-        resultado.add(t.elementAt(i).species!.name!);
-      }
-    }
-    return resultado;
-  }
-
   String tipo (List<Types> t){
 
     List<String> tipos = [];
@@ -341,6 +323,20 @@ class _DetailsPageState extends State<DetailsPage> {
     }else{
       return 'Tipos: ' + resultado;
     }
+  }
+
+  List<String> allEvolutions(List<EvolvesTo> evolvesTo) {
+
+    List<String> evolucoes = <String>[];
+
+    if (evolvesTo.isNotEmpty) {
+      for (int i = 0; i < widget.evolutionsModel.chain!.evolvesTo!.length; i++) {
+        
+        evolucoes.add(evolvesTo.elementAt(i).species!.name!);
+        allEvolutions(evolvesTo.elementAt(i).evolvesTo!);
+      }
+    }
+    return evolucoes;
   }
 
   List<int> status (List<Stats> s){
@@ -362,7 +358,6 @@ class _DetailsPageState extends State<DetailsPage> {
 
       moves.add(m[i].move!.name!.capitalize!);
     }
-    print(moves.length);
     return moves;
   }
 }
