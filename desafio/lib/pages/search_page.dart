@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:string_extensions/string_extensions.dart';
 
-import '../bloc/search_bloc.dart';
+import '../bloc/search/search_bloc.dart';
 import '../models/pokemon.dart';
 
 class SearchPage extends StatefulWidget {

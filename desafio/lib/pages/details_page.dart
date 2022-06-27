@@ -2,6 +2,7 @@ import 'package:desafio/models/evolutions.dart';
 import 'package:desafio/models/pokemon.dart';
 import 'package:flutter/material.dart';
 import 'package:string_extensions/string_extensions.dart';
+import 'package:desafio/bloc/details/details_bloc.dart';
 
 class DetailsPage extends StatefulWidget {
   const DetailsPage({Key? key, required this.pokemonModel, required this.evolutionsModel}) : super(key: key);
@@ -14,7 +15,13 @@ class DetailsPage extends StatefulWidget {
 
 class _DetailsPageState extends State<DetailsPage> {
   
-  List<String>? evolucoes = <String>[];
+  DetailsBloc details = DetailsBloc();
+  @override
+  void initState() {
+    
+    details.allEvolutions(widget.evolutionsModel.chain!);
+    super.initState();
+  }
   
   @override
 
@@ -77,7 +84,7 @@ class _DetailsPageState extends State<DetailsPage> {
                         ),
                       ),
                       Text(
-                        tipo(widget.pokemonModel.types!),
+                        details.tipo(widget.pokemonModel.types!),
                         style: const TextStyle(
                           fontFamily: 'Open Sans',
                           fontWeight: FontWeight.w700,
@@ -152,10 +159,9 @@ class _DetailsPageState extends State<DetailsPage> {
                       color: Color(0xFF02005B),
                     ),
                   ),
-                  for(int i = 0; i < widget.evolutionsModel.chain!.evolvesTo!.length; i++)
-                  //for(int i = 0; i < allEvolutions(widget.evolutionsModel.chain!.evolvesTo!).length; i++)
-                    Text(
-                      widget.evolutionsModel.chain!.evolvesTo!.elementAt(i).species!.name.capitalize!,
+                  for(int i = 0; i < details.evolucoes!.length; i++)
+                     Text(
+                      details.evolucoes![i].capitalize!,
                       style: const TextStyle(
                         fontFamily: 'Open Sans',
                         fontWeight: FontWeight.w700,
@@ -184,7 +190,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       Column(
                         children: [
                           Text(
-                            status(widget.pokemonModel.stats!)[0].toString(),
+                            details.status(widget.pokemonModel.stats!)[0].toString(),
                             style: const TextStyle(
                               fontFamily: 'Open Sans',
                               fontWeight: FontWeight.w700,
@@ -206,7 +212,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       Column(
                         children: [
                           Text(
-                            status(widget.pokemonModel.stats!)[1].toString(),
+                            details.status(widget.pokemonModel.stats!)[1].toString(),
                             style: const TextStyle(
                               fontFamily: 'Open Sans',
                               fontWeight: FontWeight.w700,
@@ -228,7 +234,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       Column(
                         children: [
                           Text(
-                            status(widget.pokemonModel.stats!)[2].toString(),
+                            details.status(widget.pokemonModel.stats!)[2].toString(),
                             style: const TextStyle(
                               fontFamily: 'Open Sans',
                               fontWeight: FontWeight.w700,
@@ -250,7 +256,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       Column(
                         children: [
                           Text(
-                            status(widget.pokemonModel.stats!)[5].toString(),
+                            details.status(widget.pokemonModel.stats!)[5].toString(),
                             style: const TextStyle(
                               fontFamily: 'Open Sans',
                               fontWeight: FontWeight.w700,
@@ -291,7 +297,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       return Padding(
                         padding: const EdgeInsets.all(7),
                         child: Text(
-                          '• ' + moves(widget.pokemonModel.moves!)[itemCount],
+                          '• ' + details.moves(widget.pokemonModel.moves!)[itemCount],
                           style: const TextStyle(
                             fontFamily: 'Open Sans',
                             fontWeight: FontWeight.w700,
@@ -309,65 +315,5 @@ class _DetailsPageState extends State<DetailsPage> {
         ),
       ),
     );
-  }
-
-  List<String> allEvolutions(List<EvolvesTo> evolvesTo) {
-
-    if (evolvesTo.isNotEmpty) { 
-      evolucoes!.add(evolvesTo.first.species!.name!);
-      allEvolutions(evolvesTo.first.evolvesTo!);
-    }
-    return evolucoes!;
-  }
-
-  void recursive(List<EvolvesTo> evolvesTo) {
-
-    if (evolvesTo.isNotEmpty) {
-      for (int i = 0; i < evolvesTo.length; i++) {
-        
-        evolucoes!.add(evolvesTo.elementAt(i).species!.name!);
-        allEvolutions(evolvesTo.elementAt(i).evolvesTo!);
-      }
-    }
-  }
-
-  String tipo (List<Types> t){
-
-    List<String> tipos = [];
-    String resultado = '';
-
-    for (int i=0; i<t.length; i++){
-
-      tipos.add(t[i].type!.name!.capitalize!);
-    }
-    resultado = tipos.join(", ");
-
-    if(t.length == 1){
-      return 'Tipo: ' + resultado;
-    }else{
-      return 'Tipos: ' + resultado;
-    }
-  }
-
-  List<int> status (List<Stats> s){
-
-    List<int> status = [];
-
-    for (int i=0; i<s.length; i++){
-
-      status.add(s[i].baseStat!);
-    }
-    return status;
-  }
-
-  List<String> moves (List<Moves> m){
-
-    List<String> moves = [];
-
-    for (int i=0; i<m.length; i++){
-
-      moves.add(m[i].move!.name!.capitalize!);
-    }
-    return moves;
   }
 }
