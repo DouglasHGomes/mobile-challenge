@@ -1,6 +1,5 @@
 import 'package:desafio/bloc/search/search_bloc.dart';
 import 'package:desafio/pages/favorites_page.dart';
-import 'package:desafio/pages/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -165,8 +164,7 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () {
                           if (_enabled) {
                             BlocProvider.of<SearchBloc>(context)
-                                .namePokemon
-                                .add(_pokemonName.toLowerCase());
+                                .setSearchList([_pokemonName.toLowerCase()]);
                             Navigator.pushNamed(
                               context,
                               '/search',

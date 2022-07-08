@@ -1,4 +1,3 @@
-import 'package:desafio/controllers/favorites_controller.dart';
 import 'package:desafio/pages/details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,7 +5,6 @@ import 'package:string_extensions/string_extensions.dart';
 import '../controllers/search_controller.dart';
 
 import '../bloc/search/search_bloc.dart';
-import '../models/pokemon.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key, required this.pokemonName}) : super(key: key);
@@ -18,6 +16,11 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   SearchController search = SearchController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,10 +80,11 @@ class _SearchPageState extends State<SearchPage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => DetailsPage(
-                                    pokemonModel: state.pokemon,
-                                    evolutionsModel: state.evolutions,
-                                  )));
+                            builder: (context) => DetailsPage(
+                              pokemonModel: state.pokemons[index].pokemon,
+                              evolutionsModel: state.pokemons[index].evolutions,
+                            ),
+                          ));
                     },
                     child: ListTile(
                       leading: Container(
@@ -92,13 +96,14 @@ class _SearchPageState extends State<SearchPage> {
                               width: 2, color: const Color(0xFFFD1A55)),
                           image: DecorationImage(
                             image: NetworkImage(
-                              state.pokemon.sprites!.frontDefault!,
+                              state.pokemons[index].pokemon.sprites!
+                                  .frontDefault!,
                             ),
                           ),
                         ),
                       ),
                       title: Text(
-                        state.pokemon.name.capitalize!,
+                        state.pokemons[index].pokemon.name.capitalize!,
                         style: const TextStyle(
                           fontFamily: 'Open Sans',
                           fontWeight: FontWeight.w700,
@@ -107,7 +112,7 @@ class _SearchPageState extends State<SearchPage> {
                         ),
                       ),
                       subtitle: Text(
-                        search.tipo(state.pokemon.types!),
+                        search.tipo(state.pokemons[index].pokemon.types!),
                         style: const TextStyle(
                           fontFamily: 'Open Sans',
                           fontWeight: FontWeight.w400,

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../bloc/search/search_bloc.dart';
@@ -41,7 +39,7 @@ class _HistoryPageState extends State<HistoryPage> {
               child: TextField(
                 onSubmitted: (value) {
                   BlocProvider.of<SearchBloc>(context)
-                      .namePokemon
+                      .pokemonSearchList
                       .add(value.toLowerCase());
                   Navigator.pushNamed(
                     context,

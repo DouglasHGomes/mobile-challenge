@@ -1,5 +1,4 @@
 //import 'package:desafio/pages/details_page.dart';
-import 'package:desafio/pages/home_page.dart';
 import 'package:desafio/route_generator.dart';
 //import 'package:desafio/pages/search_page.dart';
 import 'package:flutter/material.dart';

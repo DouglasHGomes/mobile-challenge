@@ -10,9 +10,9 @@ abstract class SearchState extends Equatable {
 class SearchLoadingState extends SearchState {}
 
 class SearchLoadedState extends SearchState {
-  final List<Pokemon> pokemon;
+  final List<StreamPokemonModel> pokemons;
 
-  const SearchLoadedState({required this.pokemon});
+  const SearchLoadedState({required this.pokemons});
 }
 
 class SearchEmptyState extends SearchState {}
@@ -21,13 +21,4 @@ class SearchErrorState extends SearchState {
   final String message;
 
   const SearchErrorState({required this.message});
-}
-
-class Pokemon {
-  final PokemonModel pokemon;
-  final SpeciesModel species;
-  final EvolutionsModel evolutions;
-
-  Pokemon(
-      {required this.pokemon, required this.species, required this.evolutions});
 }

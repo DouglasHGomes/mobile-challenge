@@ -1,7 +1,5 @@
 import 'package:desafio/models/evolutions.dart';
 import 'package:desafio/models/pokemon.dart';
-import 'package:desafio/pages/favorites_page.dart';
-import 'package:desafio/pages/history_page.dart';
 import 'package:flutter/material.dart';
 import 'package:string_extensions/string_extensions.dart';
 import 'package:desafio/controllers/details_controller.dart';
