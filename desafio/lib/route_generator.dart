@@ -1,5 +1,6 @@
 import 'package:desafio/models/evolutions.dart';
 import 'package:desafio/models/pokemon.dart';
+import 'package:desafio/pages/favorites_page.dart';
 import 'package:desafio/pages/home_page.dart';
 import 'package:desafio/pages/details_page.dart';
 import 'package:desafio/pages/history_page.dart';
@@ -30,9 +31,6 @@ class RouteGenerator {
                   child: SearchPage(
                     pokemonName: name,
                   )));
-          /*builder: (_) => SearchPage(
-                    pokemonName: name,
-                  ));*/
         }
         return noSuchRoute();
       case '/details':
@@ -45,6 +43,8 @@ class RouteGenerator {
           );
         }
         return noSuchRoute();
+      case '/favorites':
+        return MaterialPageRoute(builder: (_) => const FavoritesPage());
       case '/history':
         return MaterialPageRoute(
           builder: (_) => const HistoryPage(),

@@ -69,7 +69,7 @@ class _SearchPageState extends State<SearchPage> {
         builder: (context, state) {
           if (state is SearchLoadedState) {
             return ListView.builder(
-              itemCount: 1,
+              itemCount: state.pokemon.length,
               itemBuilder: (BuildContext context, int index) {
                 return Card(
                   child: GestureDetector(
@@ -78,8 +78,11 @@ class _SearchPageState extends State<SearchPage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => DetailsPage(
-                                    pokemonModel: state.pokemon,
-                                    evolutionsModel: state.evolutions,
+                                    pokemonModel:
+                                        state.pokemon.elementAt(index).pokemon,
+                                    evolutionsModel: state.pokemon
+                                        .elementAt(index)
+                                        .evolutions,
                                   )));
                     },
                     child: ListTile(
@@ -92,13 +95,21 @@ class _SearchPageState extends State<SearchPage> {
                               width: 2, color: const Color(0xFFFD1A55)),
                           image: DecorationImage(
                             image: NetworkImage(
-                              state.pokemon.sprites!.frontDefault!,
+                              state.pokemon
+                                  .elementAt(index)
+                                  .pokemon
+                                  .sprites!
+                                  .frontDefault!,
                             ),
                           ),
                         ),
                       ),
                       title: Text(
-                        state.pokemon.name.capitalize!,
+                        state.pokemon
+                            .elementAt(index)
+                            .pokemon
+                            .name!
+                            .capitalize!,
                         style: const TextStyle(
                           fontFamily: 'Open Sans',
                           fontWeight: FontWeight.w700,
@@ -107,7 +118,8 @@ class _SearchPageState extends State<SearchPage> {
                         ),
                       ),
                       subtitle: Text(
-                        search.tipo(state.pokemon.types!),
+                        search.tipo(
+                            state.pokemon.elementAt(index).pokemon.types!),
                         style: const TextStyle(
                           fontFamily: 'Open Sans',
                           fontWeight: FontWeight.w400,

@@ -28,10 +28,13 @@ class _FavoritesPageState extends State<FavoritesPage> {
   Future<void> getAllFavorites() async {
     favoritos = await FavoritesController.instance.readAllPokemon();
 
+    BlocProvider.of<SearchBloc>(context).namePokemon.clear();
+
     for (int i = 0; i < favoritos.length; i++) {
       BlocProvider.of<SearchBloc>(context).namePokemon.add(favoritos[i].name!);
     }
-    setState(() {});
+
+    BlocProvider.of<SearchBloc>(context).add(SearchFetchList());
   }
 
   @override
@@ -70,7 +73,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
         builder: (context, state) {
           if (state is SearchLoadedState) {
             return ListView.builder(
-              itemCount: 1,
+              itemCount: state.pokemon.length,
               itemBuilder: (BuildContext context, int index) {
                 return Card(
                   child: GestureDetector(
@@ -92,15 +95,23 @@ class _FavoritesPageState extends State<FavoritesPage> {
                           shape: BoxShape.circle,
                           border: Border.all(
                               width: 2, color: const Color(0xFFFD1A55)),
-                          image: const DecorationImage(
+                          image: DecorationImage(
                             image: NetworkImage(
-                              "https://4.bp.blogspot.com/-5Thgoa3zRw4/WKRiFTI_DzI/AAAAAAAAB_Q/sbs1OFAd0coBCUlnwKaJgA4F2JZapTbbwCLcB/s1600/Spp_RG_1.png",
+                              state.pokemon
+                                  .elementAt(index)
+                                  .pokemon
+                                  .sprites!
+                                  .frontDefault!,
                             ),
                           ),
                         ),
                       ),
                       title: Text(
-                        favoritos.elementAt(index),
+                        state.pokemon
+                            .elementAt(index)
+                            .pokemon
+                            .name!
+                            .capitalize!,
                         style: const TextStyle(
                           fontFamily: 'Open Sans',
                           fontWeight: FontWeight.w700,
@@ -108,10 +119,10 @@ class _FavoritesPageState extends State<FavoritesPage> {
                           color: Color(0xFFFD1A55),
                         ),
                       ),
-                      subtitle: const Text(
-                        "Teste",
-                        //search.tipo(favoritos.first.types!),
-                        style: TextStyle(
+                      subtitle: Text(
+                        search.tipo(
+                            state.pokemon.elementAt(index).pokemon.types!),
+                        style: const TextStyle(
                           fontFamily: 'Open Sans',
                           fontWeight: FontWeight.w400,
                           fontSize: 12,

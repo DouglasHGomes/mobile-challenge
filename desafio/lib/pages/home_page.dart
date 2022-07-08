@@ -164,9 +164,10 @@ class _HomePageState extends State<HomePage> {
                             : const Color(0xFFBDBDBD),
                         onPressed: () {
                           if (_enabled) {
-                            BlocProvider.of<SearchBloc>(context)
-                                .namePokemon
-                                .add(_pokemonName.toLowerCase());
+                            BlocProvider.of<SearchBloc>(context).geral.clear();
+                            BlocProvider.of<SearchBloc>(context).namePokemon = [
+                              _pokemonName.toLowerCase()
+                            ];
                             Navigator.pushNamed(
                               context,
                               '/search',
@@ -186,10 +187,10 @@ class _HomePageState extends State<HomePage> {
                         heroTag: "botaoFavoritos",
                         backgroundColor: const Color(0xFFFFCB05),
                         onPressed: () {
-                          Navigator.push(
+                          BlocProvider.of<SearchBloc>(context).geral.clear();
+                          Navigator.pushNamed(
                             context,
-                            MaterialPageRoute(
-                                builder: ((context) => const FavoritesPage())),
+                            '/favorites',
                           );
                         },
                         label: const Text('VER FAVORITOS')),

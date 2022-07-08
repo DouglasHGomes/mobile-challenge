@@ -33,7 +33,7 @@ class FavoritesController {
     final db = await getDatabase();
 
     await db.insert(tablePokemon, pokemon.toJson());
-    readPokemon(pokemon.id!);
+    //readPokemon(pokemon.id!);
   }
 
   Future<bool> readPokemon(int id) async {
