@@ -1,23 +1,38 @@
-import 'package:desafio/controllers/favorites_controller.dart';
-import 'package:desafio/pages/details_page.dart';
+import 'package:desafio/models/pokemon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:string_extensions/string_extensions.dart';
-import '../controllers/search_controller.dart';
-
 import '../bloc/search/search_bloc.dart';
-import '../models/pokemon.dart';
+import '../controllers/favorites_controller.dart';
+import '../controllers/search_controller.dart';
+import 'details_page.dart';
 
-class SearchPage extends StatefulWidget {
-  const SearchPage({Key? key, required this.pokemonName}) : super(key: key);
-  final String pokemonName;
+class FavoritesPage extends StatefulWidget {
+  const FavoritesPage({Key? key}) : super(key: key);
 
   @override
-  State<SearchPage> createState() => _SearchPageState();
+  State<FavoritesPage> createState() => _FavoritesPageState();
 }
 
-class _SearchPageState extends State<SearchPage> {
+class _FavoritesPageState extends State<FavoritesPage> {
   SearchController search = SearchController();
+  List<PokemonModel> favoritos = <PokemonModel>[];
+
+  @override
+  void initState() {
+    super.initState();
+
+    getAllFavorites();
+  }
+
+  Future<void> getAllFavorites() async {
+    favoritos = await FavoritesController.instance.readAllPokemon();
+
+    for (int i = 0; i < favoritos.length; i++) {
+      BlocProvider.of<SearchBloc>(context).namePokemon.add(favoritos[i].name!);
+    }
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,26 +52,12 @@ class _SearchPageState extends State<SearchPage> {
             Row(
               children: const [
                 Text(
-                  'Resultado da Pesquisa',
+                  'Favoritos',
                   style: TextStyle(
                     fontFamily: 'Open Sans',
                     fontWeight: FontWeight.w700,
                     fontSize: 18,
                     color: Color(0xFF02005B),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                const SizedBox(),
-                Text(
-                  widget.pokemonName,
-                  style: const TextStyle(
-                    fontFamily: 'Open Sans',
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                    color: Color(0xFF828282),
                   ),
                 ),
               ],
@@ -74,13 +75,14 @@ class _SearchPageState extends State<SearchPage> {
                 return Card(
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.push(
+                      /*Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => DetailsPage(
                                     pokemonModel: state.pokemon,
                                     evolutionsModel: state.evolutions,
                                   )));
+                    */
                     },
                     child: ListTile(
                       leading: Container(
@@ -90,15 +92,15 @@ class _SearchPageState extends State<SearchPage> {
                           shape: BoxShape.circle,
                           border: Border.all(
                               width: 2, color: const Color(0xFFFD1A55)),
-                          image: DecorationImage(
+                          image: const DecorationImage(
                             image: NetworkImage(
-                              state.pokemon.sprites!.frontDefault!,
+                              "https://4.bp.blogspot.com/-5Thgoa3zRw4/WKRiFTI_DzI/AAAAAAAAB_Q/sbs1OFAd0coBCUlnwKaJgA4F2JZapTbbwCLcB/s1600/Spp_RG_1.png",
                             ),
                           ),
                         ),
                       ),
                       title: Text(
-                        state.pokemon.name.capitalize!,
+                        favoritos.elementAt(index),
                         style: const TextStyle(
                           fontFamily: 'Open Sans',
                           fontWeight: FontWeight.w700,
@@ -106,9 +108,10 @@ class _SearchPageState extends State<SearchPage> {
                           color: Color(0xFFFD1A55),
                         ),
                       ),
-                      subtitle: Text(
-                        search.tipo(state.pokemon.types!),
-                        style: const TextStyle(
+                      subtitle: const Text(
+                        "Teste",
+                        //search.tipo(favoritos.first.types!),
+                        style: TextStyle(
                           fontFamily: 'Open Sans',
                           fontWeight: FontWeight.w400,
                           fontSize: 12,

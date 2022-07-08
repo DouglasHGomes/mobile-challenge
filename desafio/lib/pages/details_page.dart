@@ -1,11 +1,16 @@
 import 'package:desafio/models/evolutions.dart';
 import 'package:desafio/models/pokemon.dart';
+import 'package:desafio/pages/favorites_page.dart';
+import 'package:desafio/pages/history_page.dart';
 import 'package:flutter/material.dart';
 import 'package:string_extensions/string_extensions.dart';
-import 'package:desafio/bloc/details/details_bloc.dart';
+import 'package:desafio/controllers/details_controller.dart';
+import 'package:desafio/controllers/favorites_controller.dart';
 
 class DetailsPage extends StatefulWidget {
-  const DetailsPage({Key? key, required this.pokemonModel, required this.evolutionsModel}) : super(key: key);
+  const DetailsPage(
+      {Key? key, required this.pokemonModel, required this.evolutionsModel})
+      : super(key: key);
   final PokemonModel pokemonModel;
   final EvolutionsModel evolutionsModel;
 
@@ -14,99 +19,140 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
-  
-  DetailsBloc details = DetailsBloc();
+  DetailsController details = DetailsController();
+  bool isFavorited = false;
+
   @override
   void initState() {
-    
-    details.allEvolutions(widget.evolutionsModel.chain!);
     super.initState();
-  }
-  
-  @override
+    details.allEvolutions(widget.evolutionsModel.chain!);
 
+    verifyFavorite();
+  }
+
+  Future<void> verifyFavorite() async {
+    isFavorited =
+        await FavoritesController.instance.readPokemon(widget.pokemonModel.id!);
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(182),
         child: Container(
-            height: 182,
-            width: double.infinity,
-            color: const Color(0xFFFD1A55),
-            child: Stack(
-              children: [
-                Positioned(
-                  left: 10,
-                  top: 35,
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: const Icon(
-                      Icons.clear_rounded,
-                      size: 40,
-                      color: Color(0xFFFFFFFF),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  left: 24,
-                  top: 90,
-                  child: Container(
-                    height: 68,
-                    width: 68,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border:
-                        Border.all(width: 4, color: const Color(0xFFFFFFFF)),
-                       image: DecorationImage(
-                        scale: 1,
-                        image: NetworkImage(
-                          widget.pokemonModel.sprites!.frontDefault!,
-                         ),
-                        ),
-                      ),
-                    ),
-                ),
-                Positioned(
-                  left: 108,
-                  top: 93,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.pokemonModel.name.capitalize!,
-                        style: const TextStyle(
-                          fontFamily: 'Open Sans',
-                          fontWeight: FontWeight.w700,
-                          fontSize: 18,
-                          color: Color(0xFFFFFFFF),
-                        ),
-                      ),
-                      Text(
-                        details.tipo(widget.pokemonModel.types!),
-                        style: const TextStyle(
-                          fontFamily: 'Open Sans',
-                          fontWeight: FontWeight.w700,
-                          fontSize: 12,
-                          color: Color(0xFFFFFFFF),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                const Positioned(
-                  right: 16,
-                  bottom: 16,
-                  child: Icon(
-                    Icons.star_border,
-                    size: 35,
+          height: 182,
+          width: double.infinity,
+          color: const Color(0xFFFD1A55),
+          child: Stack(
+            children: [
+              Positioned(
+                left: 10,
+                top: 35,
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/history');
+                  },
+                  icon: const Icon(
+                    Icons.clear_rounded,
+                    size: 40,
                     color: Color(0xFFFFFFFF),
                   ),
-                )
-              ],
-            ),
+                ),
+              ),
+              Positioned(
+                left: 24,
+                top: 90,
+                child: Container(
+                  height: 68,
+                  width: 68,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border:
+                        Border.all(width: 4, color: const Color(0xFFFFFFFF)),
+                    image: DecorationImage(
+                      scale: 1,
+                      image: NetworkImage(
+                        widget.pokemonModel.sprites!.frontDefault!,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                left: 108,
+                top: 93,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.pokemonModel.name.capitalize!,
+                      style: const TextStyle(
+                        fontFamily: 'Open Sans',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                        color: Color(0xFFFFFFFF),
+                      ),
+                    ),
+                    Text(
+                      details.tipo(widget.pokemonModel.types!),
+                      style: const TextStyle(
+                        fontFamily: 'Open Sans',
+                        fontWeight: FontWeight.w700,
+                        fontSize: 12,
+                        color: Color(0xFFFFFFFF),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Positioned(
+                right: 16,
+                bottom: 16,
+                child: IconButton(
+                    onPressed: () async {
+                      if (isFavorited) {
+                        await FavoritesController.instance
+                            .delete(widget.pokemonModel.id!);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            elevation: 0,
+                            content: const Text(
+                              'Pokémon desfavoritado!',
+                              textAlign: TextAlign.center,
+                            ),
+                            backgroundColor: Colors.black.withOpacity(0.6),
+                            duration: const Duration(seconds: 1),
+                          ),
+                        );
+                      } else {
+                        await FavoritesController.instance
+                            .create(widget.pokemonModel);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            elevation: 0,
+                            content: const Text(
+                              'Pokémon favoritado!',
+                              textAlign: TextAlign.center,
+                            ),
+                            backgroundColor: Colors.black.withOpacity(0.6),
+                            duration: const Duration(seconds: 1),
+                          ),
+                        );
+                      }
+                      isFavorited = !isFavorited;
+                      setState(() {});
+                    },
+                    icon: Icon(
+                      isFavorited == true ? Icons.star : Icons.star_border,
+                      size: 35,
+                      color: const Color(0xFFFFFFFF),
+                    )),
+              )
+            ],
           ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -159,16 +205,19 @@ class _DetailsPageState extends State<DetailsPage> {
                       color: Color(0xFF02005B),
                     ),
                   ),
-                  for(int i = 0; i < details.evolucoes!.length; i++)
-                     Text(
-                      details.evolucoes![i].capitalize!,
+                  for (int i = 0; i < details.evolucoes!.length; i++)
+                    Text(
+                      details.evolucoes![i].capitalize! +
+                          " (" +
+                          details.ids!.elementAt(0) +
+                          ")",
                       style: const TextStyle(
                         fontFamily: 'Open Sans',
                         fontWeight: FontWeight.w700,
                         fontSize: 16,
                         color: Color(0xFFFD1A55),
                       ),
-                  ),
+                    ),
                   const SizedBox(
                     height: 25,
                   ),
@@ -190,7 +239,9 @@ class _DetailsPageState extends State<DetailsPage> {
                       Column(
                         children: [
                           Text(
-                            details.status(widget.pokemonModel.stats!)[0].toString(),
+                            details
+                                .status(widget.pokemonModel.stats!)[0]
+                                .toString(),
                             style: const TextStyle(
                               fontFamily: 'Open Sans',
                               fontWeight: FontWeight.w700,
@@ -212,7 +263,9 @@ class _DetailsPageState extends State<DetailsPage> {
                       Column(
                         children: [
                           Text(
-                            details.status(widget.pokemonModel.stats!)[1].toString(),
+                            details
+                                .status(widget.pokemonModel.stats!)[1]
+                                .toString(),
                             style: const TextStyle(
                               fontFamily: 'Open Sans',
                               fontWeight: FontWeight.w700,
@@ -234,7 +287,9 @@ class _DetailsPageState extends State<DetailsPage> {
                       Column(
                         children: [
                           Text(
-                            details.status(widget.pokemonModel.stats!)[2].toString(),
+                            details
+                                .status(widget.pokemonModel.stats!)[2]
+                                .toString(),
                             style: const TextStyle(
                               fontFamily: 'Open Sans',
                               fontWeight: FontWeight.w700,
@@ -256,7 +311,9 @@ class _DetailsPageState extends State<DetailsPage> {
                       Column(
                         children: [
                           Text(
-                            details.status(widget.pokemonModel.stats!)[5].toString(),
+                            details
+                                .status(widget.pokemonModel.stats!)[5]
+                                .toString(),
                             style: const TextStyle(
                               fontFamily: 'Open Sans',
                               fontWeight: FontWeight.w700,
@@ -290,24 +347,25 @@ class _DetailsPageState extends State<DetailsPage> {
                     ),
                   ),
                   ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: widget.pokemonModel.moves!.length,
-                    itemBuilder: (BuildContext context, int itemCount){
-                      return Padding(
-                        padding: const EdgeInsets.all(7),
-                        child: Text(
-                          '• ' + details.moves(widget.pokemonModel.moves!)[itemCount],
-                          style: const TextStyle(
-                            fontFamily: 'Open Sans',
-                            fontWeight: FontWeight.w700,
-                            fontSize: 16,
-                            color: Color(0xFFFD1A55),
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: widget.pokemonModel.moves!.length,
+                      itemBuilder: (BuildContext context, int itemCount) {
+                        return Padding(
+                          padding: const EdgeInsets.all(7),
+                          child: Text(
+                            '•  ' +
+                                details.moves(
+                                    widget.pokemonModel.moves!)[itemCount],
+                            style: const TextStyle(
+                              fontFamily: 'Open Sans',
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                              color: Color(0xFFFD1A55),
+                            ),
                           ),
-                        ),
-                      );
-                    }
-                  )
+                        );
+                      })
                 ],
               ),
             )
