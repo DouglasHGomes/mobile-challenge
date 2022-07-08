@@ -26,7 +26,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
             evo = await event.getEvolutions(species.evolutionChain!.url!);
 
             emit(SearchLoadedState(
-                pokemon: poke.elementAt(i), species: species, evolutions: evo));
+                pokemon: poke, species: species, evolutions: evo));
           } catch (e) {
             emit(const SearchErrorState(
                 message: 'Não foi possível encontrar o Pokémon!'));
