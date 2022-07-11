@@ -122,7 +122,23 @@ class _HistoryPageState extends State<HistoryPage> {
                               ),
                             ),
                             trailing: IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                BlocProvider.of<SearchBloc>(context)
+                                    .geral
+                                    .clear();
+                                BlocProvider.of<SearchBloc>(context)
+                                    .namePokemon = [
+                                  lista!.elementAt(index).toLowerCase().trim()
+                                ];
+                                Navigator.pushNamed(
+                                  context,
+                                  '/search',
+                                  arguments: lista!
+                                      .elementAt(index)
+                                      .toLowerCase()
+                                      .trim(),
+                                );
+                              },
                               icon: const Icon(Icons.history),
                             ),
                           ),
@@ -142,30 +158,3 @@ class _HistoryPageState extends State<HistoryPage> {
     setState(() {});
   }
 }
-
-/*Container(
-                          decoration: const BoxDecoration(
-                            border: Border(
-                                bottom: BorderSide(
-                                    width: 1.0, color: Color(0xFFE0E0E0))),
-                          ),
-                          padding: const EdgeInsets.only(left: 28, top: 5),
-                          height: 54,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                lista!.elementAt(index),
-                                style: const TextStyle(
-                                  color: Color(0xFF828282),
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {},
-                                icon: const Icon(Icons.history),
-                              )
-                            ],
-                          ),
-                        );*/

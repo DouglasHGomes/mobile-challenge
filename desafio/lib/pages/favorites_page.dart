@@ -140,7 +140,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                           ),
                         ),
                         trailing: const Icon(
-                          Icons.arrow_circle_right_sharp,
+                          Icons.chevron_right,
                           color: Color(0xFFFD1A55),
                         ),
                       ),
