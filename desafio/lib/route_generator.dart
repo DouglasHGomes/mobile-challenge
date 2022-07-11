@@ -1,4 +1,5 @@
 import 'package:desafio/models/evolutions.dart';
+import 'package:desafio/models/geral.dart';
 import 'package:desafio/models/pokemon.dart';
 import 'package:desafio/pages/favorites_page.dart';
 import 'package:desafio/pages/home_page.dart';
@@ -13,8 +14,7 @@ import 'bloc/search/search_bloc.dart';
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final name = settings.arguments;
-    final poke = settings.arguments;
-    final evo = settings.arguments;
+    final geral = settings.arguments;
 
     switch (settings.name) {
       case '/':
@@ -34,11 +34,10 @@ class RouteGenerator {
         }
         return noSuchRoute();
       case '/details':
-        if (poke is PokemonModel && evo is EvolutionsModel) {
+        if (geral is GeralModel) {
           return MaterialPageRoute(
             builder: (_) => DetailsPage(
-              pokemonModel: poke,
-              evolutionsModel: evo,
+              geralModel: geral,
             ),
           );
         }

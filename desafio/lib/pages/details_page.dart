@@ -1,4 +1,5 @@
 import 'package:desafio/models/evolutions.dart';
+import 'package:desafio/models/geral.dart';
 import 'package:desafio/models/pokemon.dart';
 import 'package:desafio/pages/favorites_page.dart';
 import 'package:desafio/pages/history_page.dart';
@@ -8,11 +9,8 @@ import 'package:desafio/controllers/details_controller.dart';
 import 'package:desafio/controllers/favorites_controller.dart';
 
 class DetailsPage extends StatefulWidget {
-  const DetailsPage(
-      {Key? key, required this.pokemonModel, required this.evolutionsModel})
-      : super(key: key);
-  final PokemonModel pokemonModel;
-  final EvolutionsModel evolutionsModel;
+  const DetailsPage({Key? key, required this.geralModel}) : super(key: key);
+  final GeralModel geralModel;
 
   @override
   State<DetailsPage> createState() => _DetailsPageState();
@@ -25,14 +23,14 @@ class _DetailsPageState extends State<DetailsPage> {
   @override
   void initState() {
     super.initState();
-    details.allEvolutions(widget.evolutionsModel.chain!);
+    details.allEvolutions(widget.geralModel.evolutions.chain!);
 
     verifyFavorite();
   }
 
   Future<void> verifyFavorite() async {
-    isFavorited =
-        await FavoritesController.instance.readPokemon(widget.pokemonModel.id!);
+    isFavorited = await FavoritesController.instance
+        .readPokemon(widget.geralModel.pokemon.id!);
     setState(() {});
   }
 
@@ -74,7 +72,7 @@ class _DetailsPageState extends State<DetailsPage> {
                     image: DecorationImage(
                       scale: 1,
                       image: NetworkImage(
-                        widget.pokemonModel.sprites!.frontDefault!,
+                        widget.geralModel.pokemon.sprites!.frontDefault!,
                       ),
                     ),
                   ),
@@ -87,7 +85,7 @@ class _DetailsPageState extends State<DetailsPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.pokemonModel.name.capitalize!,
+                      widget.geralModel.pokemon.name.capitalize!,
                       style: const TextStyle(
                         fontFamily: 'Open Sans',
                         fontWeight: FontWeight.w700,
@@ -96,7 +94,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       ),
                     ),
                     Text(
-                      details.tipo(widget.pokemonModel.types!),
+                      details.tipo(widget.geralModel.pokemon.types!),
                       style: const TextStyle(
                         fontFamily: 'Open Sans',
                         fontWeight: FontWeight.w700,
@@ -114,7 +112,7 @@ class _DetailsPageState extends State<DetailsPage> {
                     onPressed: () async {
                       if (isFavorited) {
                         await FavoritesController.instance
-                            .delete(widget.pokemonModel.id!);
+                            .delete(widget.geralModel.pokemon.id!);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             elevation: 0,
@@ -128,7 +126,7 @@ class _DetailsPageState extends State<DetailsPage> {
                         );
                       } else {
                         await FavoritesController.instance
-                            .create(widget.pokemonModel);
+                            .create(widget.geralModel.pokemon);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             elevation: 0,
@@ -185,7 +183,7 @@ class _DetailsPageState extends State<DetailsPage> {
                     ),
                   ),
                   Text(
-                    widget.pokemonModel.weight.toString() + ' kg',
+                    widget.geralModel.pokemon.weight.toString() + ' kg',
                     style: const TextStyle(
                       fontFamily: 'Open Sans',
                       fontWeight: FontWeight.w700,
@@ -209,7 +207,7 @@ class _DetailsPageState extends State<DetailsPage> {
                     Text(
                       details.evolucoes![i].capitalize! +
                           " (" +
-                          details.ids!.elementAt(0) +
+                          details.tipoEvo(widget.geralModel.pokemon.types!) +
                           ")",
                       style: const TextStyle(
                         fontFamily: 'Open Sans',
@@ -240,7 +238,7 @@ class _DetailsPageState extends State<DetailsPage> {
                         children: [
                           Text(
                             details
-                                .status(widget.pokemonModel.stats!)[0]
+                                .status(widget.geralModel.pokemon.stats!)[0]
                                 .toString(),
                             style: const TextStyle(
                               fontFamily: 'Open Sans',
@@ -264,7 +262,7 @@ class _DetailsPageState extends State<DetailsPage> {
                         children: [
                           Text(
                             details
-                                .status(widget.pokemonModel.stats!)[1]
+                                .status(widget.geralModel.pokemon.stats!)[1]
                                 .toString(),
                             style: const TextStyle(
                               fontFamily: 'Open Sans',
@@ -288,7 +286,7 @@ class _DetailsPageState extends State<DetailsPage> {
                         children: [
                           Text(
                             details
-                                .status(widget.pokemonModel.stats!)[2]
+                                .status(widget.geralModel.pokemon.stats!)[2]
                                 .toString(),
                             style: const TextStyle(
                               fontFamily: 'Open Sans',
@@ -312,7 +310,7 @@ class _DetailsPageState extends State<DetailsPage> {
                         children: [
                           Text(
                             details
-                                .status(widget.pokemonModel.stats!)[5]
+                                .status(widget.geralModel.pokemon.stats!)[5]
                                 .toString(),
                             style: const TextStyle(
                               fontFamily: 'Open Sans',
@@ -349,14 +347,14 @@ class _DetailsPageState extends State<DetailsPage> {
                   ListView.builder(
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
-                      itemCount: widget.pokemonModel.moves!.length,
+                      itemCount: widget.geralModel.pokemon.moves!.length,
                       itemBuilder: (BuildContext context, int itemCount) {
                         return Padding(
                           padding: const EdgeInsets.all(7),
                           child: Text(
                             '•  ' +
-                                details.moves(
-                                    widget.pokemonModel.moves!)[itemCount],
+                                details.moves(widget.geralModel.pokemon.moves!)[
+                                    itemCount],
                             style: const TextStyle(
                               fontFamily: 'Open Sans',
                               fontWeight: FontWeight.w700,

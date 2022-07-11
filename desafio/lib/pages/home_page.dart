@@ -1,9 +1,7 @@
 import 'package:desafio/bloc/search/search_bloc.dart';
-import 'package:desafio/pages/favorites_page.dart';
-import 'package:desafio/pages/search_page.dart';
+import 'package:desafio/controllers/sharedpreferences_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, required this.title}) : super(key: key);
@@ -17,8 +15,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   bool _enabled = false;
   String _pokemonName = '';
-
-  Future<SharedPreferences> prefs = SharedPreferences.getInstance();
+  SharedPreferencesController spController = SharedPreferencesController();
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +141,7 @@ class _HomePageState extends State<HomePage> {
                           color: Color(0xFFBDBDBD),
                           fontFamily: 'Open Sans',
                           fontWeight: FontWeight.w400,
-                          fontSize: 12,
+                          fontSize: 14,
                         ),
                         hintText: 'Digite o nome do pokémon...',
                         border: OutlineInputBorder(
@@ -164,9 +161,10 @@ class _HomePageState extends State<HomePage> {
                             : const Color(0xFFBDBDBD),
                         onPressed: () {
                           if (_enabled) {
+                            spController.setHistory(_pokemonName);
                             BlocProvider.of<SearchBloc>(context).geral.clear();
                             BlocProvider.of<SearchBloc>(context).namePokemon = [
-                              _pokemonName.toLowerCase()
+                              _pokemonName.toLowerCase().trim()
                             ];
                             Navigator.pushNamed(
                               context,

@@ -72,72 +72,83 @@ class _FavoritesPageState extends State<FavoritesPage> {
         listener: (context, state) {},
         builder: (context, state) {
           if (state is SearchLoadedState) {
-            return ListView.builder(
-              itemCount: state.pokemon.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Card(
-                  child: GestureDetector(
-                    onTap: () {
-                      /*Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => DetailsPage(
-                                    pokemonModel: state.pokemon,
-                                    evolutionsModel: state.evolutions,
-                                  )));
-                    */
-                    },
-                    child: ListTile(
-                      leading: Container(
-                        height: 52,
-                        width: 52,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                              width: 2, color: const Color(0xFFFD1A55)),
-                          image: DecorationImage(
-                            image: NetworkImage(
-                              state.pokemon
-                                  .elementAt(index)
-                                  .pokemon
-                                  .sprites!
-                                  .frontDefault!,
+            if (state.pokemon.isEmpty) {
+              return const Center(
+                child: Text('Nenhum Pokémon favoritado!',
+                    style: TextStyle(
+                      fontFamily: 'Open Sans',
+                      fontWeight: FontWeight.w700,
+                      fontSize: 18,
+                      color: Color(0xFF02005B),
+                    )),
+              );
+            } else {
+              return ListView.builder(
+                itemCount: state.pokemon.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Card(
+                    margin: const EdgeInsets.only(bottom: 1),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => DetailsPage(
+                                    geralModel:
+                                        state.pokemon.elementAt(index))));
+                      },
+                      child: ListTile(
+                        leading: Container(
+                          height: 52,
+                          width: 52,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                                width: 2, color: const Color(0xFFFD1A55)),
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                state.pokemon
+                                    .elementAt(index)
+                                    .pokemon
+                                    .sprites!
+                                    .frontDefault!,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      title: Text(
-                        state.pokemon
-                            .elementAt(index)
-                            .pokemon
-                            .name!
-                            .capitalize!,
-                        style: const TextStyle(
-                          fontFamily: 'Open Sans',
-                          fontWeight: FontWeight.w700,
-                          fontSize: 16,
+                        title: Text(
+                          state.pokemon
+                              .elementAt(index)
+                              .pokemon
+                              .name!
+                              .capitalize!,
+                          style: const TextStyle(
+                            fontFamily: 'Open Sans',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                            color: Color(0xFFFD1A55),
+                          ),
+                        ),
+                        subtitle: Text(
+                          search.tipo(
+                              state.pokemon.elementAt(index).pokemon.types!),
+                          style: const TextStyle(
+                            fontFamily: 'Open Sans',
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12,
+                            color: Color(0xFF4F4F4F),
+                          ),
+                        ),
+                        trailing: const Icon(
+                          Icons.arrow_circle_right_sharp,
                           color: Color(0xFFFD1A55),
                         ),
                       ),
-                      subtitle: Text(
-                        search.tipo(
-                            state.pokemon.elementAt(index).pokemon.types!),
-                        style: const TextStyle(
-                          fontFamily: 'Open Sans',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12,
-                          color: Color(0xFF4F4F4F),
-                        ),
-                      ),
-                      trailing: const Icon(
-                        Icons.arrow_circle_right_sharp,
-                        color: Color(0xFFFD1A55),
-                      ),
                     ),
-                  ),
-                );
-              },
-            );
+                  );
+                },
+              );
+            }
           } else if (state is SearchLoadingState) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is SearchErrorState) {

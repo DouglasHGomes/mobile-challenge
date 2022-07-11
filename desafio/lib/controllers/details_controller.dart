@@ -49,6 +49,18 @@ class DetailsController {
     }
   }
 
+  String tipoEvo(List<Types> t) {
+    List<String> tipos = [];
+    String resultado = '';
+
+    for (int i = 0; i < t.length; i++) {
+      tipos.add(t[i].type!.name!.capitalize!);
+    }
+    resultado = tipos.join(", ");
+
+    return resultado;
+  }
+
   String tipoEvolucoes(List<Types> t) {
     List<String> tipos = [];
     String resultado = '';

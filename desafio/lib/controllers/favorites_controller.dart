@@ -18,7 +18,7 @@ class FavoritesController {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, filePath);
 
-    return await openDatabase(path, version: 2, onCreate: _createDB);
+    return await openDatabase(path, version: 3, onCreate: _createDB);
   }
 
   Future _createDB(Database db, int version) async {
@@ -33,7 +33,6 @@ class FavoritesController {
     final db = await getDatabase();
 
     await db.insert(tablePokemon, pokemon.toJson());
-    //readPokemon(pokemon.id!);
   }
 
   Future<bool> readPokemon(int id) async {
