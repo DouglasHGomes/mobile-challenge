@@ -90,12 +90,11 @@ class _FavoritesPageState extends State<FavoritesPage> {
                     margin: const EdgeInsets.only(bottom: 1),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => DetailsPage(
-                                    geralModel:
-                                        state.pokemon.elementAt(index))));
+                        Navigator.pushNamed(
+                          context,
+                          '/details',
+                          arguments: state.pokemon.elementAt(index),
+                        );
                       },
                       child: ListTile(
                         leading: Container(

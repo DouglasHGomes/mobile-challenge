@@ -1,5 +1,5 @@
 import 'package:desafio/bloc/search/search_bloc.dart';
-import 'package:desafio/controllers/sharedpreferences_controller.dart';
+import 'package:desafio/controllers/history_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

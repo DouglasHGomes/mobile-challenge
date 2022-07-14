@@ -1,5 +1,4 @@
 import 'package:desafio/models/pokemon.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:string_extensions/string_extensions.dart';
 
 class SearchController {

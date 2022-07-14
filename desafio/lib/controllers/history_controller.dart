@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-final List<String> pesquisas = <String>['', '', ''];
+final List<String> pesquisas = <String>[];
+final int listSize = 3;
 
 class SharedPreferencesController {
   Future<void> setHistory(String nome) async {
@@ -11,9 +12,11 @@ class SharedPreferencesController {
     } else if (pesquisas.contains(nome)) {
       pesquisas.removeWhere((element) => element == nome);
       pesquisas.insert(0, nome);
-    } else {
+    } else if (pesquisas.length == listSize) {
       pesquisas.insert(0, nome);
       pesquisas.removeLast();
+    } else {
+      pesquisas.insert(0, nome);
     }
     prefs.setStringList('lista', pesquisas);
   }

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../bloc/search/search_bloc.dart';
-import '../controllers/sharedpreferences_controller.dart';
+import '../controllers/history_controller.dart';
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({Key? key}) : super(key: key);
@@ -48,6 +48,7 @@ class _HistoryPageState extends State<HistoryPage> {
           children: [
             Center(
                 child: SizedBox(
+              height: 43,
               width: 360,
               child: TextField(
                 controller: _textFieldController,

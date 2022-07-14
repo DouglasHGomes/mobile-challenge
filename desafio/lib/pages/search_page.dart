@@ -1,4 +1,3 @@
-import 'package:desafio/controllers/favorites_controller.dart';
 import 'package:desafio/pages/details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,7 +5,6 @@ import 'package:string_extensions/string_extensions.dart';
 import '../controllers/search_controller.dart';
 
 import '../bloc/search/search_bloc.dart';
-import '../models/pokemon.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key, required this.pokemonName}) : super(key: key);
@@ -74,12 +72,11 @@ class _SearchPageState extends State<SearchPage> {
                 return Card(
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => DetailsPage(
-                                    geralModel: state.pokemon.elementAt(index),
-                                  )));
+                      Navigator.pushNamed(
+                        context,
+                        '/details',
+                        arguments: state.pokemon.elementAt(index),
+                      );
                     },
                     child: ListTile(
                       leading: Container(

@@ -61,25 +61,14 @@ class DetailsController {
     return resultado;
   }
 
-  String tipoEvolucoes(List<Types> t) {
-    List<String> tipos = [];
-    String resultado = '';
+  List<double> stats(List<Stats> s) {
+    List<int> pos = [0, 1, 2, 5];
+    List<double> stats = [];
 
-    for (int i = 0; i < t.length; i++) {
-      tipos.add(t[i].type!.name!.capitalize!);
+    for (int i = 0; i < 4; i++) {
+      stats.add(s[pos[i]].baseStat!.toDouble());
     }
-    resultado = tipos.join(", ");
-
-    return resultado;
-  }
-
-  List<int> status(List<Stats> s) {
-    List<int> status = [];
-
-    for (int i = 0; i < s.length; i++) {
-      status.add(s[i].baseStat!);
-    }
-    return status;
+    return stats;
   }
 
   List<String> moves(List<Moves> m) {

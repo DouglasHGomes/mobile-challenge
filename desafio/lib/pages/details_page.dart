@@ -1,12 +1,11 @@
-import 'package:desafio/models/evolutions.dart';
 import 'package:desafio/models/geral.dart';
-import 'package:desafio/models/pokemon.dart';
-import 'package:desafio/pages/favorites_page.dart';
-import 'package:desafio/pages/history_page.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:string_extensions/string_extensions.dart';
 import 'package:desafio/controllers/details_controller.dart';
 import 'package:desafio/controllers/favorites_controller.dart';
+import 'package:desafio/controllers/graphs_controller.dart';
+import 'dart:math';
 
 class DetailsPage extends StatefulWidget {
   const DetailsPage({Key? key, required this.geralModel}) : super(key: key);
@@ -18,7 +17,9 @@ class DetailsPage extends StatefulWidget {
 
 class _DetailsPageState extends State<DetailsPage> {
   DetailsController details = DetailsController();
+  GraphsController graphs = GraphsController();
   bool isFavorited = false;
+  bool graphEnable = true;
 
   @override
   void initState() {
@@ -32,6 +33,12 @@ class _DetailsPageState extends State<DetailsPage> {
     isFavorited = await FavoritesController.instance
         .readPokemon(widget.geralModel.pokemon.id!);
     setState(() {});
+  }
+
+  void changeGraph() {
+    setState(() {
+      graphEnable = !graphEnable;
+    });
   }
 
   @override
@@ -182,6 +189,9 @@ class _DetailsPageState extends State<DetailsPage> {
                       color: Color(0xFF02005B),
                     ),
                   ),
+                  const SizedBox(
+                    height: 5,
+                  ),
                   Text(
                     widget.geralModel.pokemon.weight.toString() + ' kg',
                     style: const TextStyle(
@@ -192,7 +202,7 @@ class _DetailsPageState extends State<DetailsPage> {
                     ),
                   ),
                   const SizedBox(
-                    height: 25,
+                    height: 10,
                   ),
                   const Text(
                     'Evoluções',
@@ -203,21 +213,27 @@ class _DetailsPageState extends State<DetailsPage> {
                       color: Color(0xFF02005B),
                     ),
                   ),
+                  const SizedBox(
+                    height: 5,
+                  ),
                   for (int i = 0; i < details.evolucoes!.length; i++)
-                    Text(
-                      details.evolucoes![i].capitalize! +
-                          " (" +
-                          details.tipoEvo(widget.geralModel.pokemon.types!) +
-                          ")",
-                      style: const TextStyle(
-                        fontFamily: 'Open Sans',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                        color: Color(0xFFFD1A55),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 2.5, bottom: 2.5),
+                      child: Text(
+                        details.evolucoes![i].capitalize! +
+                            " (" +
+                            details.tipoEvo(widget.geralModel.pokemon.types!) +
+                            ")",
+                        style: const TextStyle(
+                          fontFamily: 'Open Sans',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                          color: Color(0xFFFD1A55),
+                        ),
                       ),
                     ),
                   const SizedBox(
-                    height: 25,
+                    height: 10,
                   ),
                   const Text(
                     'Status base',
@@ -231,109 +247,136 @@ class _DetailsPageState extends State<DetailsPage> {
                   const SizedBox(
                     height: 8,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Column(
+                  AnimatedCrossFade(
+                    crossFadeState: graphEnable
+                        ? CrossFadeState.showFirst
+                        : CrossFadeState.showSecond,
+                    duration: const Duration(seconds: 1),
+                    firstChild: GestureDetector(
+                      onTap: changeGraph,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Text(
-                            details
-                                .status(widget.geralModel.pokemon.stats!)[0]
-                                .toString(),
-                            style: const TextStyle(
-                              fontFamily: 'Open Sans',
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
-                              color: Color(0xFFFD1A55),
-                            ),
+                          Column(
+                            children: [
+                              Text(
+                                details
+                                    .stats(widget.geralModel.pokemon.stats!)[0]
+                                    .toString(),
+                                style: const TextStyle(
+                                  fontFamily: 'Open Sans',
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16,
+                                  color: Color(0xFFFD1A55),
+                                ),
+                              ),
+                              const Text(
+                                'HP',
+                                style: TextStyle(
+                                  fontFamily: 'Open Sans',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14,
+                                  color: Color(0xFFFD1A55),
+                                ),
+                              ),
+                            ],
                           ),
-                          const Text(
-                            'HP',
-                            style: TextStyle(
-                              fontFamily: 'Open Sans',
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12,
-                              color: Color(0xFFFD1A55),
-                            ),
+                          Column(
+                            children: [
+                              Text(
+                                details
+                                    .stats(widget.geralModel.pokemon.stats!)[1]
+                                    .toString(),
+                                style: const TextStyle(
+                                  fontFamily: 'Open Sans',
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16,
+                                  color: Color(0xFFFD1A55),
+                                ),
+                              ),
+                              const Text(
+                                'Attack',
+                                style: TextStyle(
+                                  fontFamily: 'Open Sans',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12,
+                                  color: Color(0xFFFD1A55),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                details
+                                    .stats(widget.geralModel.pokemon.stats!)[2]
+                                    .toString(),
+                                style: const TextStyle(
+                                  fontFamily: 'Open Sans',
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16,
+                                  color: Color(0xFFFD1A55),
+                                ),
+                              ),
+                              const Text(
+                                'Defense',
+                                style: TextStyle(
+                                  fontFamily: 'Open Sans',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12,
+                                  color: Color(0xFFFD1A55),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                details
+                                    .stats(widget.geralModel.pokemon.stats!)[3]
+                                    .toString(),
+                                style: const TextStyle(
+                                  fontFamily: 'Open Sans',
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16,
+                                  color: Color(0xFFFD1A55),
+                                ),
+                              ),
+                              const Text(
+                                'Speed',
+                                style: TextStyle(
+                                  fontFamily: 'Open Sans',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12,
+                                  color: Color(0xFFFD1A55),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                      Column(
-                        children: [
-                          Text(
-                            details
-                                .status(widget.geralModel.pokemon.stats!)[1]
-                                .toString(),
-                            style: const TextStyle(
-                              fontFamily: 'Open Sans',
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
-                              color: Color(0xFFFD1A55),
-                            ),
-                          ),
-                          const Text(
-                            'Attack',
-                            style: TextStyle(
-                              fontFamily: 'Open Sans',
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12,
-                              color: Color(0xFFFD1A55),
-                            ),
-                          ),
-                        ],
+                    ),
+                    secondChild: GestureDetector(
+                      onTap: changeGraph,
+                      child: SizedBox(
+                        height: 100,
+                        child: BarChart(BarChartData(
+                          barTouchData: graphs.barTouchData,
+                          titlesData: graphs.titlesData,
+                          borderData: graphs.borderData,
+                          barGroups: graphs.barGroups(
+                              details.stats(widget.geralModel.pokemon.stats!)),
+                          gridData: FlGridData(show: false),
+                          alignment: BarChartAlignment.spaceAround,
+                          maxY: details
+                              .stats(widget.geralModel.pokemon.stats!)
+                              .reduce(max),
+                        )),
                       ),
-                      Column(
-                        children: [
-                          Text(
-                            details
-                                .status(widget.geralModel.pokemon.stats!)[2]
-                                .toString(),
-                            style: const TextStyle(
-                              fontFamily: 'Open Sans',
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
-                              color: Color(0xFFFD1A55),
-                            ),
-                          ),
-                          const Text(
-                            'Defense',
-                            style: TextStyle(
-                              fontFamily: 'Open Sans',
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12,
-                              color: Color(0xFFFD1A55),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Text(
-                            details
-                                .status(widget.geralModel.pokemon.stats!)[5]
-                                .toString(),
-                            style: const TextStyle(
-                              fontFamily: 'Open Sans',
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
-                              color: Color(0xFFFD1A55),
-                            ),
-                          ),
-                          const Text(
-                            'Speed',
-                            style: TextStyle(
-                              fontFamily: 'Open Sans',
-                              fontWeight: FontWeight.w400,
-                              fontSize: 12,
-                              color: Color(0xFFFD1A55),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                    ),
                   ),
                   const SizedBox(
-                    height: 32,
+                    height: 15,
                   ),
                   const Text(
                     'Habilidades',

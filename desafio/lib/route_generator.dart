@@ -1,6 +1,4 @@
-import 'package:desafio/models/evolutions.dart';
 import 'package:desafio/models/geral.dart';
-import 'package:desafio/models/pokemon.dart';
 import 'package:desafio/pages/favorites_page.dart';
 import 'package:desafio/pages/home_page.dart';
 import 'package:desafio/pages/details_page.dart';
