@@ -21,12 +21,23 @@ class _DetailsPageState extends State<DetailsPage> {
   bool isFavorited = false;
   bool graphEnable = true;
 
+  List<Widget> stats = <Widget>[];
+
   @override
   void initState() {
     super.initState();
     details.allEvolutions(widget.geralModel.evolutions.chain!);
 
     verifyFavorite();
+
+    for (int i = 0;
+        i < details.stats(widget.geralModel.pokemon.stats!).length;
+        i++) {
+      stats.add(_buildStat(
+        details.stats(widget.geralModel.pokemon.stats!)[i].toString(),
+        details.statNames[i],
+      ));
+    }
   }
 
   Future<void> verifyFavorite() async {
@@ -256,104 +267,8 @@ class _DetailsPageState extends State<DetailsPage> {
                       onTap: changeGraph,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Column(
-                            children: [
-                              Text(
-                                details
-                                    .stats(widget.geralModel.pokemon.stats!)[0]
-                                    .toString(),
-                                style: const TextStyle(
-                                  fontFamily: 'Open Sans',
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 16,
-                                  color: Color(0xFFFD1A55),
-                                ),
-                              ),
-                              const Text(
-                                'HP',
-                                style: TextStyle(
-                                  fontFamily: 'Open Sans',
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14,
-                                  color: Color(0xFFFD1A55),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                details
-                                    .stats(widget.geralModel.pokemon.stats!)[1]
-                                    .toString(),
-                                style: const TextStyle(
-                                  fontFamily: 'Open Sans',
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 16,
-                                  color: Color(0xFFFD1A55),
-                                ),
-                              ),
-                              const Text(
-                                'Attack',
-                                style: TextStyle(
-                                  fontFamily: 'Open Sans',
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12,
-                                  color: Color(0xFFFD1A55),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                details
-                                    .stats(widget.geralModel.pokemon.stats!)[2]
-                                    .toString(),
-                                style: const TextStyle(
-                                  fontFamily: 'Open Sans',
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 16,
-                                  color: Color(0xFFFD1A55),
-                                ),
-                              ),
-                              const Text(
-                                'Defense',
-                                style: TextStyle(
-                                  fontFamily: 'Open Sans',
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12,
-                                  color: Color(0xFFFD1A55),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                details
-                                    .stats(widget.geralModel.pokemon.stats!)[3]
-                                    .toString(),
-                                style: const TextStyle(
-                                  fontFamily: 'Open Sans',
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 16,
-                                  color: Color(0xFFFD1A55),
-                                ),
-                              ),
-                              const Text(
-                                'Speed',
-                                style: TextStyle(
-                                  fontFamily: 'Open Sans',
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12,
-                                  color: Color(0xFFFD1A55),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: stats,
                       ),
                     ),
                     secondChild: GestureDetector(
@@ -389,6 +304,7 @@ class _DetailsPageState extends State<DetailsPage> {
                   ),
                   ListView.builder(
                       scrollDirection: Axis.vertical,
+                      physics: NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: widget.geralModel.pokemon.moves!.length,
                       itemBuilder: (BuildContext context, int itemCount) {
@@ -413,6 +329,31 @@ class _DetailsPageState extends State<DetailsPage> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildStat(String statValue, String statName) {
+    return Column(
+      children: [
+        Text(
+          statValue,
+          style: const TextStyle(
+            fontFamily: 'Open Sans',
+            fontWeight: FontWeight.w700,
+            fontSize: 16,
+            color: Color(0xFFFD1A55),
+          ),
+        ),
+        Text(
+          statName,
+          style: const TextStyle(
+            fontFamily: 'Open Sans',
+            fontWeight: FontWeight.w400,
+            fontSize: 12,
+            color: Color(0xFFFD1A55),
+          ),
+        ),
+      ],
     );
   }
 }

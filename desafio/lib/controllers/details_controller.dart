@@ -6,6 +6,13 @@ class DetailsController {
   List<String>? evolucoes = <String>[];
   List<String>? ids = <String>[];
 
+  List<String> statNames = [
+    'ATTACK',
+    'SPEED',
+    'DEF',
+    'HP',
+  ];
+
   List<String> allEvolutions(Chain c) {
     if (c.evolvesTo!.isNotEmpty) {
       evolucoes!.add(c.species!.name!);
