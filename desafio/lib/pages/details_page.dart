@@ -190,10 +190,10 @@ class _DetailsPageState extends State<DetailsPage> {
                     ),
                   ),
                   const SizedBox(
-                    height: 5,
+                    height: 2,
                   ),
                   Text(
-                    widget.geralModel.pokemon.weight.toString() + ' kg',
+                    (widget.geralModel.pokemon.weight! / 10).toString() + ' kg',
                     style: const TextStyle(
                       fontFamily: 'Open Sans',
                       fontWeight: FontWeight.w700,
@@ -389,6 +389,7 @@ class _DetailsPageState extends State<DetailsPage> {
                   ),
                   ListView.builder(
                       scrollDirection: Axis.vertical,
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       itemCount: widget.geralModel.pokemon.moves!.length,
                       itemBuilder: (BuildContext context, int itemCount) {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../bloc/search/search_bloc.dart';
+import '../bloc/search_bloc.dart';
 import '../controllers/history_controller.dart';
 
 class HistoryPage extends StatefulWidget {

@@ -1,4 +1,4 @@
-import 'package:desafio/bloc/search/search_bloc.dart';
+import 'package:desafio/bloc/search_bloc.dart';
 import 'package:desafio/controllers/history_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -133,24 +133,39 @@ class _HomePageState extends State<HomePage> {
                         });
                       }
                     },
-                    decoration: const InputDecoration(
-                        suffixIcon: Icon(
-                          Icons.search,
+                    decoration: InputDecoration(
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            if (_enabled) {
+                              spController.setHistory(_pokemonName);
+                              BlocProvider.of<SearchBloc>(context)
+                                  .geral
+                                  .clear();
+                              BlocProvider.of<SearchBloc>(context).namePokemon =
+                                  [_pokemonName.toLowerCase().trim()];
+                              Navigator.pushNamed(
+                                context,
+                                '/search',
+                                arguments: _pokemonName,
+                              );
+                            }
+                          },
+                          icon: const Icon(Icons.search),
                         ),
-                        hintStyle: TextStyle(
+                        hintStyle: const TextStyle(
                           color: Color(0xFFBDBDBD),
                           fontFamily: 'Open Sans',
                           fontWeight: FontWeight.w400,
                           fontSize: 14,
                         ),
                         hintText: 'Digite o nome do pokémon...',
-                        border: OutlineInputBorder(
+                        border: const OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(50)),
                         )),
                   ),
                 ),
                 Positioned(
-                  bottom: 100,
+                  bottom: 140,
                   child: SizedBox(
                     width:
                         (MediaQuery.of(context).size.width * 0.867) * 0.897435,
@@ -177,7 +192,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 Positioned(
-                  bottom: 27,
+                  bottom: 80,
                   child: SizedBox(
                     width:
                         (MediaQuery.of(context).size.width * 0.867) * 0.897435,
@@ -192,6 +207,26 @@ class _HomePageState extends State<HomePage> {
                           );
                         },
                         label: const Text('VER FAVORITOS')),
+                  ),
+                ),
+                Positioned(
+                  bottom: 20,
+                  child: SizedBox(
+                    width:
+                        (MediaQuery.of(context).size.width * 0.867) * 0.897435,
+                    child: FloatingActionButton.extended(
+                        heroTag: "botaoListar",
+                        backgroundColor: const Color.fromARGB(255, 3, 128, 177),
+                        onPressed: () {
+                          BlocProvider.of<SearchBloc>(context).geral.clear();
+                          BlocProvider.of<SearchBloc>(context).url =
+                              'https://pokeapi.co/api/v2/pokemon/?offset=0&limit=10';
+                          Navigator.pushNamed(
+                            context,
+                            '/list',
+                          );
+                        },
+                        label: const Text('LISTAR TODOS OS POKÉMON')),
                   ),
                 ),
               ],

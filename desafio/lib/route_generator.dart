@@ -3,11 +3,12 @@ import 'package:desafio/pages/favorites_page.dart';
 import 'package:desafio/pages/home_page.dart';
 import 'package:desafio/pages/details_page.dart';
 import 'package:desafio/pages/history_page.dart';
+import 'package:desafio/pages/list_page.dart';
 import 'package:desafio/pages/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'bloc/search/search_bloc.dart';
+import 'bloc/search_bloc.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -46,7 +47,13 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (_) => const HistoryPage(),
         );
-
+      case '/list':
+        return MaterialPageRoute(
+          builder: (context) => BlocProvider.value(
+            value: BlocProvider.of<SearchBloc>(context)..add(ListFetchList()),
+            child: const ListPage(),
+          ),
+        );
       default:
         return noSuchRoute();
     }

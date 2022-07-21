@@ -15,6 +15,13 @@ class SearchLoadedState extends SearchState {
   const SearchLoadedState({required this.pokemon});
 }
 
+class ListLoadedState extends SearchState {
+  final ListModel all;
+  final List<GeralModel> pokemon;
+
+  const ListLoadedState({required this.all, required this.pokemon});
+}
+
 class SearchEmptyState extends SearchState {}
 
 class SearchErrorState extends SearchState {

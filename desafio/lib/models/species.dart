@@ -2,15 +2,14 @@ class SpeciesModel {
   EvolutionChain? evolutionChain;
   int? id;
 
-  SpeciesModel(
-      {
-      this.evolutionChain,
-      this.id,});
+  SpeciesModel({
+    this.evolutionChain,
+    this.id,
+  });
 
   SpeciesModel.fromJson(Map<String, dynamic> json) {
-
     evolutionChain = json['evolution_chain'] != null
-        ? new EvolutionChain.fromJson(json['evolution_chain'])
+        ? EvolutionChain.fromJson(json['evolution_chain'])
         : null;
     id = json['id'];
   }

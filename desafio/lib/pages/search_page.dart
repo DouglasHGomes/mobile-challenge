@@ -1,10 +1,9 @@
-import 'package:desafio/pages/details_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:string_extensions/string_extensions.dart';
 import '../controllers/search_controller.dart';
 
-import '../bloc/search/search_bloc.dart';
+import '../bloc/search_bloc.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key, required this.pokemonName}) : super(key: key);

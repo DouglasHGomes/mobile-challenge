@@ -2,10 +2,9 @@ import 'package:desafio/models/pokemon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:string_extensions/string_extensions.dart';
-import '../bloc/search/search_bloc.dart';
+import '../bloc/search_bloc.dart';
 import '../controllers/favorites_controller.dart';
 import '../controllers/search_controller.dart';
-import 'details_page.dart';
 
 class FavoritesPage extends StatefulWidget {
   const FavoritesPage({Key? key}) : super(key: key);
